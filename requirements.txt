@@ -1,0 +1,10 @@
+tensorflow
+fastapi
+uvicorn
+pillow
+numpy
+python-multipart
+gradio
+requests
+pytest
+httpx
