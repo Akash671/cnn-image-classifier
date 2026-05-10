@@ -22,6 +22,47 @@ jobs:
           github_repo_id: Akash671/cnn-image-classifier
           # Your Hugging Face Space path
           huggingface_repo_id: Akash671/cnn-image-classifier
-          # Ensure this secret is set in GitHub Settings
+          # Ensure this secret is set in GitHub Settingsname: Deploy to Hugging Face
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          # Configure identity
+          git config --global user.email "hitmanmit1996@gmail.com"
+          git config --global user.name "Akash671"
+
+          # Clone the space using the token for authentication
+          git clone https://Akash671:$HF_TOKEN@huggingface.co/spaces/Akash671/cnn-image-classifier hf-space
+
+          # Sync local files to the cloned folder, excluding the .git metadata
+          rsync -av --exclude '.git' ./ hf-space/
+
+          cd hf-space
+          
+          # Force the remote URL to use the HF_TOKEN for the push
+          git remote set-url origin https://Akash671:$HF_TOKEN@huggingface.co/spaces/Akash671/cnn-image-classifier
+
+          git add .
+          git commit -m "Auto deploy from GitHub Actions" || echo "No changes to commit"
+          
+          # Push to the main branch of the Hugging Face Space
+          git push origin main
+
           hf_token: ${{ secrets.HF_TOKEN }}
           repo_type: space
