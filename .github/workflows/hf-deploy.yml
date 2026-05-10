@@ -8,30 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          lfs: true
-
-      - name: Push to Hub
-        uses: huggingface/hub-sync@v1
-        with:
-          # Your GitHub repo path
-          github_repo_id: Akash671/cnn-image-classifier
-          # Your Hugging Face Space path
-          huggingface_repo_id: Akash671/cnn-image-classifier
-          # Ensure this secret is set in GitHub Settingsname: Deploy to Hugging Face
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
@@ -63,6 +39,3 @@ jobs:
           
           # Push to the main branch of the Hugging Face Space
           git push origin main
-
-          hf_token: ${{ secrets.HF_TOKEN }}
-          repo_type: space
