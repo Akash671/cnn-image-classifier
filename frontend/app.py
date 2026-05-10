@@ -1,14 +1,21 @@
-import os
 import sys
+import os
 import streamlit as st
-from PIL import Image
 
-# Add the project root to the python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# Force the working directory to be the root of the project
+# This allows 'import app.utils' to work correctly
+root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if root_path not in sys.path:
+    sys.path.insert(0, root_path)
 
-# Now these imports will work
-from app.utils import read_image
-from app.predict import predict
+# Now try the imports
+try:
+    from app.utils import read_image
+    from app.predict import predict
+except ModuleNotFoundError:
+    # Backup if 'app' is being treated as the root itself
+    from utils import read_image
+    from predict import predict
 
 st.title("CNN Image Classifier")
 
