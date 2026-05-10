@@ -1,12 +1,9 @@
-#API_URL = "http://127.0.0.1:8001/predict"
 import streamlit as st
-import requests
-
-# FastAPI endpoint
-#API_URL = "http://127.0.0.1"
-
-API_URL = "http://127.0.0.1:8001/predict"
-
+from PIL import Image
+import io
+# Import your logic directly from your other files
+from app.utils import read_image
+from app.predict import predict
 
 st.title("CNN Image Classifier")
 
@@ -20,16 +17,18 @@ if uploaded_file is not None:
     # Predict button
     if st.button("Classify"):
         with st.spinner("Classifying..."):
-            # Prepare the file for the requests post
-            files = {"file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
-            
             try:
-                response = requests.post(API_URL, files=files)
-                if response.status_code == 200:
-                    st.success("Classification Complete!")
-                    # Pretty-print the JSON output
-                    st.json(response.json())
-                else:
-                    st.error(f"Error: {response.status_code}")
+                # 1. Read the image using your existing utils
+                image_bytes = uploaded_file.getvalue()
+                image = read_image(image_bytes)
+
+                # 2. Run prediction directly (No API call needed!)
+                predicted_class, confidence = predict(image)
+
+                # 3. Show results
+                st.success("Classification Complete!")
+                st.write(f"**Result:** {predicted_class}")
+                st.write(f"**Confidence:** {confidence:.2f}")
+                
             except Exception as e:
-                st.error(f"Connection failed: {e}")
+                st.error(f"Prediction failed: {e}")
