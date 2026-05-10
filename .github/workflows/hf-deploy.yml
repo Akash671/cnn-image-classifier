@@ -8,29 +8,20 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
 
-      - name: Push to Hugging Face
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-
-        run: |
-
-          git config --global user.email "you@example.com"
-          git config --global user.name "github-actions"
-
-          git clone https://Akash671:$HF_TOKEN@huggingface.co/spaces/Akash671/cnn-image-classifier
-
-          rsync -av --exclude '.git' ./ hf-space/
-
-          cd hf-space
-
-          git add .
-
-          git commit -m "Auto deploy from GitHub Actions" || echo "No changes"
-
-          git push
+      - name: Push to Hub
+        uses: huggingface/hub-sync@v1
+        with:
+          # Your GitHub repo path
+          github_repo_id: Akash671/cnn-image-classifier
+          # Your Hugging Face Space path
+          huggingface_repo_id: Akash671/cnn-image-classifier
+          # Ensure this secret is set in GitHub Settings
+          hf_token: ${{ secrets.HF_TOKEN }}
+          repo_type: space
