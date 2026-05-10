@@ -1,7 +1,12 @@
+import os
+import sys
 import streamlit as st
 from PIL import Image
-import io
-# Import your logic directly from your other files
+
+# Add the project root to the python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+# Now these imports will work
 from app.utils import read_image
 from app.predict import predict
 
