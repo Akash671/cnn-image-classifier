@@ -1,10 +1,9 @@
 ---
 title: CNN Image Classifier
-emoji: 🚀
+emoji: 🖼️
 colorFrom: blue
-colorTo: green
+colorTo: indigo
 sdk: streamlit
-sdk_version: 1.31.0
-app_file: app.py
+app_file: frontend/app.py
 pinned: false
 ---
